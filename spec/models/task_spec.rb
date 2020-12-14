@@ -42,11 +42,11 @@ RSpec.describe Task, type: :model do
         title: "First Task",
         status: 0
       )
-      task = user.tasks.build(
+      task_with_another_title = user.tasks.build(
         title: "Second Task",
         status: 0
       )
-      expect(task).to be_valid
+      expect(task_with_another_title).to be_valid
     end
   end
 end
