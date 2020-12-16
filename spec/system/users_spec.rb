@@ -63,10 +63,14 @@ RSpec.describe "Users", type: :system do
   end
 
   fdescribe 'ログイン後' do
+
+    before do
+      sign_in_as user
+    end
+
     describe 'ユーザー編集' do
       context 'フォームの入力値が正常' do
         it 'ユーザーの編集が成功する' do
-          sign_in_as user
           click_link 'Mypage'
           click_link 'Edit', href: edit_user_path(user)
           fill_in 'Email', with: 'new_email@example.com'
@@ -77,7 +81,6 @@ RSpec.describe "Users", type: :system do
       end
       context 'メールアドレスが未入力' do
         it 'ユーザーの編集が失敗する' do
-          sign_in_as user
           click_link 'Mypage'
           click_link 'Edit', href: edit_user_path(user)
           fill_in 'Email', with: ''
@@ -90,7 +93,6 @@ RSpec.describe "Users", type: :system do
         it 'ユーザーの編集が失敗する' do
           other_user_with_duplicated_email = create(:user)
 
-          sign_in_as user
           click_link 'Mypage'
           click_link 'Edit', href: edit_user_path(user)
           fill_in 'Email', with: other_user_with_duplicated_email.email
@@ -103,7 +105,6 @@ RSpec.describe "Users", type: :system do
         it '編集ページへのアクセスが失敗する' do
           other_user = create(:user, :other_user)
 
-          sign_in_as user
           visit edit_user_path(other_user)
           expect(page).to have_current_path user_path(user)
           expect(page).to have_content 'Forbidden access.'
@@ -116,7 +117,6 @@ RSpec.describe "Users", type: :system do
         it '新規作成したタスクが表示される' do
           new_task_title = 'new task!'
 
-          sign_in_as user
           click_link 'New task', href: new_task_path
           fill_in 'Title', with: new_task_title
           select 'todo', from: 'Status'
